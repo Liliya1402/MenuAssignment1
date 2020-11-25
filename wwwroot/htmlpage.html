@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/script.js"></script>
+</head>
+<body>
+    <h1>Restaurant API Project</h1>
+
+    <div id="result"></div>
+    <button type="button" onclick="loadData()">Load Menu Items</button>
+
+    <script>
+
+        const apiUrl = 'http://localhost:49192/api/MenuItem';
+
+        function loadData() {
+
+            $.ajax({
+                url: apiUrl,
+                success: function (data) {
+
+                    let html = "";
+
+                    $.each(data, function (index, value) {
+                        html +=
+                            "<b>" + index + "</b> - " +
+                            value.id + ": " +
+                            value.name + " $" +
+                            value.price + "<br>";
+                    });
+
+                    $("#result").html(html);
+
+                    console.log(data);
+                }
+            }
+            );
+        }
+
+    </script>
+</body>
+</html>
