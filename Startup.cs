@@ -24,7 +24,7 @@ namespace MenuAssignment
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+           services.AddControllers();
             services.AddSwaggerGen(
                 c =>
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -33,6 +33,7 @@ namespace MenuAssignment
                     Title = "Restarant Api Help"
                 })
                 );
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,7 +44,7 @@ namespace MenuAssignment
             {
                 app.UseDeveloperExceptionPage();
             }
-
+           // app.UseMvc();
             app.UseRouting();
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -59,7 +60,7 @@ namespace MenuAssignment
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+               endpoints.MapControllers();
             });
         }
     }

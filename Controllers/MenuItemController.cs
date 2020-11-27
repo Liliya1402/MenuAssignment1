@@ -28,10 +28,10 @@ namespace MenuAssignment.Controllers
         {
 
            
-          // _logger.LogInformation("The Get MenuItem was invoked!");
-         // _logger.LogWarning("This is Warning!");
+         //  _logger.LogInformation("The Get MenuItem was invoked!");
+        //  _logger.LogWarning("This is Warning!");
           //_logger.LogError("This is Error");
-         _logger.LogCritical("This is something critical!!!");
+        // _logger.LogCritical("This is something critical!!!");
         
             return _dbc.MenuItems.ToList();
               
@@ -58,13 +58,17 @@ namespace MenuAssignment.Controllers
         public void Put(int id, [FromBody] MenuItem value)
         {
             MenuItem mi = _dbc.MenuItems.Where(m => m.Id == id).FirstOrDefault();
-            if(mi !=null)
+
+            if (mi != null)
             {
                 mi.Name = value.Name;
                 mi.Price = value.Price;
+
                 _dbc.SaveChanges();
             }
         }
+
+    
 
         // DELETE api/<MenuItemController>/5
         [HttpDelete("{id}")]
