@@ -26,57 +26,54 @@ namespace MenuAssignment.Migrations
 
                     b.Property<double>("Price");
 
-                    b.Property<int?>("Reservationid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("Reservationid");
 
                     b.ToTable("MenuItems");
                 });
 
-            modelBuilder.Entity("MenuAssignment.Models.OrderReservation", b =>
+            modelBuilder.Entity("MenuAssignment.Models.OrderReservationItems", b =>
                 {
-                    b.Property<int>("orderId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("customerId");
+                    b.Property<int>("MenuItemId");
 
-                    b.HasKey("orderId");
+                    b.Property<int>("ReservationId");
 
-                    b.HasIndex("customerId");
+                    b.HasKey("Id");
 
-                    b.ToTable("OrderReservation");
+                    b.HasIndex("MenuItemId");
+
+                    b.HasIndex("ReservationId");
+
+                    b.ToTable("OrderReservations");
                 });
 
             modelBuilder.Entity("MenuAssignment.Models.Reservation", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("Date");
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("customerId");
+                    b.HasKey("Id");
 
-                    b.HasKey("id");
-
-                    b.ToTable("reservations");
+                    b.ToTable("Reservations");
                 });
 
-            modelBuilder.Entity("MenuAssignment.Models.MenuItem", b =>
+            modelBuilder.Entity("MenuAssignment.Models.OrderReservationItems", b =>
                 {
-                    b.HasOne("MenuAssignment.Models.Reservation")
-                        .WithMany("MenuItems")
-                        .HasForeignKey("Reservationid");
-                });
+                    b.HasOne("MenuAssignment.Models.MenuItem", "MenuItem")
+                        .WithMany()
+                        .HasForeignKey("MenuItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity("MenuAssignment.Models.OrderReservation", b =>
-                {
                     b.HasOne("MenuAssignment.Models.Reservation", "Reservation")
                         .WithMany()
-                        .HasForeignKey("customerId");
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

@@ -7,14 +7,17 @@ using System.Threading.Tasks;
 
 namespace MenuAssignment.Models
 {
-    [Table("OrderReservation")]
-    public class OrderReservation
+  
+    public class OrderReservationItems
     {
-        [Key]
-        public int orderId { set; get; }
-    
+     
+       public int Id { set; get; }
+        public int ReservationId { set; get; }
+        public int  MenuItemId { set; get; }
         public virtual Reservation Reservation { get; set; }
-        List<MenuItem> MenuItems { set; get; }
-       
+        public MenuItem MenuItem { set; get; }
+
+        
+
     }
 }

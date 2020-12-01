@@ -44,7 +44,8 @@ namespace MenuAssignment
             {
                 app.UseDeveloperExceptionPage();
             }
-           // app.UseMvc();
+            app.UseHttpsRedirection();
+
             app.UseRouting();
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -53,7 +54,8 @@ namespace MenuAssignment
             app.UseSwaggerUI( c=>
               { 
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Test Api");
-            c.RoutePrefix = string.Empty;
+                  c.SwaggerEndpoint("/swagger/v2/swagger.json", "Test Api");
+                  c.RoutePrefix = string.Empty;
         });
                
             

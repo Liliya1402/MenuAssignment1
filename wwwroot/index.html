@@ -1,0 +1,332 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <style>
+
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+    </style>
+</head>
+<body>
+     <div class="col-sm-4">
+    <h1>Restaurant API Project</h1>
+    
+    <h3>Menu Items</h3>
+    <button onclick="loadData()" class="btn btn-primary">Show Menu Items</button>
+
+    <table id="menuItemsTable"></table>
+
+    <hr />
+    <button id="myBtn" class="btn btn-primary">Add Menu Item</button>
+
+    <!-- Add MenuItem Modal window -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            Add Menu Item <span class="close">&times;</span> <br>
+            <hr />
+            Name: <br>
+            <input id="inputName" /> <br>
+            <p id="nameValidationMessage"></p>
+            Price: <br>
+            <input id="inputPrice" /> <br>
+            <p id="priceValidationMessage"></p>
+
+            <!--Image: <br />
+            <input id="menuItemImage" type="file" multiple accept='image/*'
+                   onchange="encodeImageFileAsURL(this)"> <hr />-->
+
+            <button type="button" class=" btn btn-primary" id="btnAddMenuItem" onclick="addData()">
+                Add Menu Item
+            </button>
+            <p id="resultMessage"></p>
+        </div>
+    </div>
+
+    <hr />
+    <button id="myBtnEdit" class=" btn btn-primary">Edit Menu Item</button>
+    <!-- Edit Menu Item Modal content -->
+    <div id="myModalEdit" class="modal">
+        <div class="modal-content">
+            Edit Menu Item
+            <span id="closeEditMenuItem" class="close">&times;</span>
+            <hr />
+            <table border="0">
+                <tr>
+                    <td>Enter Id:</td>
+                    <td>
+                        <input id="miIdEdit" onblur="loadMenuItemById()" style="width: 20px" />
+                    </td>
+                    <td><p id="idValidationMessage"></p></td>
+                    <td rowspan="3">
+                        <img id="imgEditMenuItem" width='200' />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name:</td>
+                    <td>
+                        <input id="miNameEdit" />
+                    </td>
+                    <td><p id="nameValidationMessage"></p></td>
+                </tr>
+                <tr>
+                    <td>Price: </td>
+                    <td>
+                        <input id="miPriceEdit" />
+                    </td>
+                    <td><p id="priceValidationMessage"></p></td>
+                </tr>
+            </table>
+            <hr>
+
+            <button type="button" onclick="editMenuItem()">Save</button>
+            <div id="editResult"></div>
+        </div>
+
+    </div>
+
+    <hr />
+    <button id="myBtnDelete" class="btn btn-danger">Delete Menu Item</button>
+    <!-- Delete Menu Item Modal content -->
+    <div id="myModalDelete" class="modal">
+        <div class="modal-content">
+            Delete Menu Item
+            <span id="closeDeleteMenuItem" class="close">&times;</span>
+            <hr />
+            <table border="0">
+                <tr>
+                    <td style="width: 100px">Enter Id:</td>
+                    <td style="width: 100px">
+                        <input id="miIdDelete" onblur="loadMenuItemByIdForDelete()" style="width: 20px" />
+                    </td>
+                    <td rowspan="3">
+                        <img id="imgDeleteMenuItem" width='200' />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name:</td>
+                    <td>
+                        <p id="miNameDelete"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Price: </td>
+                    <td>
+                        <p id="miPriceDelete"></p>
+                    </td>
+                </tr>
+            </table>
+            <hr>
+
+            <button type="button" onclick="deleteMenuItem()">Delete</button>
+            <div id="deleteResult"></div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        const apiUrl = 'http://localhost:49192/api/menuitem';
+
+
+        //function loadData() {
+
+        //    $.ajax({
+        //        url: apiUrl,
+        //        success: function (data) {
+
+        //            let html = "";
+
+        //            $.each(data, function (index, value) {
+        //                html +=
+        //                    "<b>" + index + "</b> - " +
+        //                    value.id + ": " +
+        //                    value.name + " $" +
+        //                    value.price + "<br>";
+        //            });
+
+        //            $("#result").html(html);
+
+        //            console.log(data);
+        //        }
+        //    }
+        //    );
+
+        function deleteMenuItem() {
+
+            var id = $("#miIdDelete").val();
+
+            $.ajax({
+                type: 'delete',
+                url: apiMenuItemUrl + "//" + id,
+                success: function (data) {
+                    $("#deleteResult").html("Menu Item has been deleted");
+                }
+            });
+        }
+
+        function editMenuItem() {
+
+            var id = $("#miIdEdit").val();
+            var name = $("#miNameEdit").val();
+            var price = $("#miPriceEdit").val();
+
+            var menuItem = {
+                // "id": id,
+                "name": name,
+                "price": price
+            };
+
+            $.ajax({
+                type: 'put',
+                url: apiMenuItemUrl + "//" + id,
+                data: JSON.stringify(menuItem),
+                contentType: "application/json; charset=utf-8",
+                //traditional: true,
+                success: function (data) {
+                    $("#editResult").html("Menu Item has been changed");
+                }
+            });
+        }
+
+        function loadMenuItemById() {
+
+            let id = $("#miIdEdit").val();
+            $("#editResult").html("");
+            $.ajax({
+                url: apiMenuItemUrl + '//' + id,
+                success: function (data) {
+                    console.log(data);
+                    $("#miNameEdit").val(data.name);
+                    $("#miPriceEdit").val(data.price);
+                    //  $("#imgEditMenuItem").attr("src", 'data:image/jpeg;base64,' + data.image);
+                }
+            });
+        }
+
+        function loadMenuItemByIdForDelete() {
+
+            let id = $("#miIdDelete").val();
+            $("#deleteResult").html("");
+            $.ajax({
+                url: apiMenuItemUrl + '//' + id,
+                success: function (data) {
+                    console.log(data);
+                    $("#miNameDelete").html(data.name);
+                    $("#miPriceDelete").html(data.price);
+                    //   $("#imgDeleteMenuItem").attr("src", 'data:image/jpeg;base64,' + data.image);
+                }
+            });
+        }
+
+        function loadData() {
+            $("#menuItemsTable").empty();
+            $.ajax({
+                url: apiUrl,
+                success: function (data) {
+                    let html = "";
+                    $.each(data, function (index, value) {
+                        html += ("<tr>" +
+                            + "<td>" + value.id + ": <td/>"
+                            + "<td>" + value.name + "<td/>"
+                            + "<td>" + " $" + value.price + "<td/>"
+                            //  + "<td>" + "<img width='200' src='data:image/jpeg;base64,"
+                            //   + value.image + "' />" + "<td/>"
+                            //    + "</tr>"
+                        );
+                    });
+                    $("#menuItemsTable").append(html);
+                }
+            });
+        }
+
+        //var image;
+        //function encodeImageFileAsURL(element) {
+        //    var file = element.files[0];
+        //    var reader = new FileReader();
+        //    reader.onloadend = function () {
+        //        console.log('RESULT', reader.result);
+        //        image = reader.result;
+        //    }
+        //    reader.readAsDataURL(file);
+
+
+        function addData() {
+
+            let name = $("#inputName").val();
+            let price = $("#inputPrice").val();
+
+            let menuItem = {
+                "name": name,
+                "price": price,
+                //  "image": image.replace('data:image/jpeg;base64,', '')
+            };
+
+            debugger;
+            $.ajax({
+                type: 'post',
+                url: apiUrl,
+                data: JSON.stringify(menuItem),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    document.getElementById('resultMessage')
+                        .innerHTML = "<span style='color: green'>Your data has been add seccessully!</span>";
+                    document.getElementById('btnAddMenuItem').disabled = true;
+
+                },
+                error: function (data) {
+                    document.getElementById('resultMessage')
+                        .innerHTML = "Something wrong!!!"
+                }
+            });
+        }
+
+    </script>
+
+    <script src="js/script.js"></script>
+
+</body>
+        </html >
